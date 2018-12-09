@@ -1,7 +1,7 @@
 # Solving the Dining Philosophers Problem using MPI
 
 ## The Dining Philosopher Problem
-The dining philosopher problem states that **K** philsolphers seated around a circular table with one chopstick between each pair of philosophers. There is one chopstick between each philosopher. A philosopher may eat if he can pickup the two chopsticks adjacent to him. One chopstick may be picked up by any one of its adjacent followers but not both.
+The dining philosopher problem states that **K** philosophers seated around a circular table with one chopstick between each pair of philosophers. There is one chopstick between each philosopher. A philosopher may eat if he can pickup the two chopsticks adjacent to him. One chopstick may be picked up by any one of its adjacent followers but not both.
 
 
 ![alt text](./philosophers.png?raw=true)
@@ -33,3 +33,9 @@ Alternatively, you can also run the application by
 `$ mpirun  -np 6 ./phil`
 
 where 6 indicates the number of processes.
+
+You can either the constants value to show more debugging messages. Set
+
+`DEBUG = 1` to show more messages
+
+`DEBUG = 0` to hide debugging messages
