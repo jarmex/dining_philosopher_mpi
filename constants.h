@@ -18,6 +18,9 @@ const int NEED_CHOPSTICK = 0;
 const int RESPONSE_CHOPSTICK = 1;
 const int RELEASE_CHOPSTICKS = 2;
 
-const int DEBUG = 1;
+const int DEBUG = 0;
+const int SHOW_RUNNING_COUNT_DEBUG = 1;
+
+const int PHILOSOPHER_COMPLETED = 5;
 
 #endif
