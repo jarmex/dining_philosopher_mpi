@@ -18,4 +18,6 @@ const int NEED_CHOPSTICK = 0;
 const int RESPONSE_CHOPSTICK = 1;
 const int RELEASE_CHOPSTICKS = 2;
 
+const int DEBUG = 1;
+
 #endif

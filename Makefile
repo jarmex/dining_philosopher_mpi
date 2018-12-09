@@ -40,7 +40,7 @@ clean:
 	rm -f *.o $(EXECS)
 
 run:
-	mpirun  -np 8 ./phil
+	mpirun  -np 6 ./phil
 
 .c.o:
 	$(CC) $(CFLAGS) -w -c $*.c

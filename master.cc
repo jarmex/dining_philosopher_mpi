@@ -27,7 +27,7 @@ void master(int process_id, int no_of_process)
   printf("      Welcome to DINING PHILOSOPHER PROBLEM using MPI   \n\n");
   printf("This applications requires that the number of processes should be even number.\n");
   printf("The first process is used for input and output and orchestrating the whole application.\n");
-  printf("***************************************************************************\n");
+  printf("***************************************************************************\n\n");
 
   if (no_of_process % 2 != 0)
   {
@@ -37,12 +37,12 @@ void master(int process_id, int no_of_process)
   // create array to hold the number of philosopher eating count
   phil_count = new int[no_of_process - 1];
   // read the number of iterations from the user
-  cout << endl
-       << "Enter the number of iterations: ";
+  cout << "Enter the number of iterations: ";
   cin >> iterations;
 
   MPI_Status status;
 
+  // printf("Starting.......................\n\n");
   // hold waiting philosophers
   list<int> queue;
 
@@ -69,29 +69,38 @@ void master(int process_id, int no_of_process)
     philosopher_num = status.MPI_SOURCE;
     leftchopstick = philosopher_num % (no_of_process - 1);
     rightchopstick = philosopher_num - 1;
+    // printf("REQUEST RCV: Philosopher %d, status %d\n", philosopher_num, status.MPI_TAG);
     // check if the request is for chop sticks
     if (status.MPI_TAG == NEED_CHOPSTICK)
     {
+      if (DEBUG)
+        printf("MASTER: got philosopher %d chopsticks request\n", philosopher_num);
       // check if both left and right chopstick are free
       if (chopsticks[leftchopstick] == true && chopsticks[rightchopstick] == true)
       {
         // set the chopsticks as taken
         chopsticks[leftchopstick] = false;
         chopsticks[rightchopstick] = false;
-
+        if (DEBUG)
+          printf("MASTER: sent philosopher %d the chopsticks\n", philosopher_num);
         // send the chop stick response to the right philosopher
         MPI_Send(&requests, 1, MPI_INT, philosopher_num, RESPONSE_CHOPSTICK, MPI_COMM_WORLD);
+
         // the philosopher is eating
         phil_count[philosopher_num - 1]++;
       }
       else // chopsticks are not available. add it to queue
       {
+        if (DEBUG)
+          printf("MASTER: philosopher %d is waiting for chopsticks\n", philosopher_num);
         queue.push_back(philosopher_num);
       }
     }
     // check if the request is releasing chopsticks
     if (status.MPI_TAG == RELEASE_CHOPSTICKS)
     {
+      if (DEBUG)
+        printf("MASTER got philosopher %d chopsticks release\n", philosopher_num);
       // release the chopsticks taken.
       // philosopher has release the chopsticks
       chopsticks[leftchopstick] = true;
@@ -103,6 +112,7 @@ void master(int process_id, int no_of_process)
         for (list<int>::iterator it = queue.begin(); it != queue.end(); it++)
         {
           philosopher_num = *it;
+          printf("from the loop %d\n", philosopher_num);
           leftchopstick = philosopher_num % (no_of_process - 1);
           rightchopstick = philosopher_num - 1;
           // check if the chopsticks are free to be taken
@@ -112,6 +122,8 @@ void master(int process_id, int no_of_process)
             chopsticks[leftchopstick] = false;
             chopsticks[rightchopstick] = false;
             // send the chop stick response to the right philosopher
+            if (DEBUG)
+              printf("MASTER: sent philosopher %d the chopsticks\n", philosopher_num);
             MPI_Send(&requests, 1, MPI_INT, philosopher_num, RESPONSE_CHOPSTICK, MPI_COMM_WORLD);
             // the philosopher is eating. increase the counter
             phil_count[philosopher_num - 1]++;
